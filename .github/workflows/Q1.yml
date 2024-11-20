@@ -1,0 +1,26 @@
+name: Create Q1_archive_README.md
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Copy README.md to Q1_archive_README.md
+      run: |
+        cp README.md Q1_archive_README.md
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "Biyiv"
+        git config user.email "baptiste.hay@hotmail.fr"
+        git add Q1_archive_README.md
+        git commit -m "Create Q1_archive_README.md from README.md"
+        git push
