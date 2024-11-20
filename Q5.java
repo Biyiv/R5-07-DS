@@ -9,7 +9,7 @@ public class Q5 {
             int nbEtoiles = Integer.parseInt(args[0]);
             for (int i = nbEtoiles; i >= 1; i--) {
                 for (int j = 0; j < i; j++) {
-                    System.out.print("*");
+                    System.out.print("x");
                 }
             }
         } catch (NumberFormatException e) {
