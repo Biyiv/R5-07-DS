@@ -41,11 +41,11 @@ jobs:
 
     - name: Generate Q6_différences.txt
       run: |
-        # Get the current archive file name
-        CURRENT_ARCHIVE="Q6_archive_${DATE}.txt"
+        # Get the name of the most recent archive file (created in this workflow)
+        CURRENT_ARCHIVE=$(ls -1t Q6_archive_*.txt | head -n 1)
 
         # Find the previous archive file (excluding the current one)
-        PREVIOUS_ARCHIVE=$(ls -1 Q6_archive_*.txt | grep -v $CURRENT_ARCHIVE | sort -r | head -n 1)
+        PREVIOUS_ARCHIVE=$(ls -1t Q6_archive_*.txt | grep -v $CURRENT_ARCHIVE | head -n 1)
 
         # If there's a previous archive, calculate differences
         if [ -n "$PREVIOUS_ARCHIVE" ]; then
