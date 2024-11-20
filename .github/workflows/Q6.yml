@@ -42,7 +42,6 @@ jobs:
     - name: Generate Q6_différences.txt
       run: |
         # Get the current archive file name
-        DATE=$(date '+%d-%m-%Y-%H%M%S')
         CURRENT_ARCHIVE="Q6_archive_${DATE}.txt"
 
         # Find the previous archive file (excluding the current one)
