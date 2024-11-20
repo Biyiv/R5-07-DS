@@ -1,0 +1,63 @@
+name: Create Q6_archive_date.txt and Q6_différences.txt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Generate Q6_archive_date.txt
+      run: |
+        # Get the current date and time in JJ-MM-AAAA-HHMMSS format
+        DATE=$(date '+%d-%m-%Y-%H%M%S')
+        ARCHIVE_FILE="Q6_archive_${DATE}.txt"
+
+        # Add your name and surname
+        echo "Nom et prénom : Hay Baptiste" > $ARCHIVE_FILE
+        echo "" >> $ARCHIVE_FILE
+
+        # Add the content of Q6.java
+        echo "Contenu du fichier Q6.java :" >> $ARCHIVE_FILE
+        cat Q6.java >> $ARCHIVE_FILE
+
+        # Add the size of Q6.java in characters and lines
+        echo "" >> $ARCHIVE_FILE
+        echo "Taille de Q6.java :" >> $ARCHIVE_FILE
+        wc Q6.java >> $ARCHIVE_FILE
+
+        # Save the name of the archive file for later use
+        echo $ARCHIVE_FILE > last_archive_name.txt
+
+        # Commit and push the archive file
+        git config user.name "Biyiv"
+        git config user.email "baptiste.hay@hotmail.fr"
+        git add $ARCHIVE_FILE last_archive_name.txt
+        git commit -m "Create ${ARCHIVE_FILE} with Q6.java content and metadata"
+        git push
+
+    - name: Generate Q6_différences.txt
+      run: |
+        # Load the name of the last archive file
+        LAST_ARCHIVE=$(cat last_archive_name.txt)
+
+        # Find the previous archive file (excluding the current one)
+        PREVIOUS_ARCHIVE=$(ls -1 Q6_archive_*.txt | grep -v $LAST_ARCHIVE | sort -r | head -n 1)
+
+        # If there's a previous archive, calculate differences
+        if [ -n "$PREVIOUS_ARCHIVE" ]; then
+          diff $PREVIOUS_ARCHIVE $LAST_ARCHIVE > Q6_différences.txt || true
+        else
+          echo "Pas de fichier précédent trouvé pour comparaison." > Q6_différences.txt
+        fi
+
+        # Commit and push the differences file
+        git add Q6_différences.txt
+        git commit -m "Create Q6_différences.txt comparing $LAST_ARCHIVE and $PREVIOUS_ARCHIVE"
+        git push
