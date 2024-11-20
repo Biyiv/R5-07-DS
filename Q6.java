@@ -6,6 +6,7 @@ public class Q6 {
         }
 
         try {
+            
             int nbEtoiles = Integer.parseInt(args[0]);
             for (int i = nbEtoiles; i >= 1; i--) {
                 for (int j = 0; j < i; j++) {
