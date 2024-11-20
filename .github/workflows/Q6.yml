@@ -33,19 +33,19 @@ jobs:
         wc Q6.java >> $ARCHIVE_FILE
 
         # Save the name of the archive file for later use
-        echo $ARCHIVE_FILE > last_archive_name.txt
+        echo $ARCHIVE_FILE > Q6_archive_${DATE}.txt
 
         # Commit and push the archive file
         git config user.name "Biyiv"
         git config user.email "baptiste.hay@hotmail.fr"
-        git add $ARCHIVE_FILE last_archive_name.txt
+        git add $ARCHIVE_FILE Q6_archive_${DATE}.txt
         git commit -m "Create ${ARCHIVE_FILE} with Q6.java content and metadata"
         git push
 
     - name: Generate Q6_différences.txt
       run: |
         # Load the name of the last archive file
-        LAST_ARCHIVE=$(cat last_archive_name.txt)
+        LAST_ARCHIVE=$(cat Q6_archive_${DATE}.txt)
 
         # Find the previous archive file (excluding the current one)
         PREVIOUS_ARCHIVE=$(ls -1 Q6_archive_*.txt | grep -v $LAST_ARCHIVE | sort -r | head -n 1)
