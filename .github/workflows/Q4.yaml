@@ -1,0 +1,35 @@
+name: Create Q4_archive_date.txt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Generate Q4_archive_date.txt
+      run: |
+        # Format the date as JJ-MM-AAAA
+        DATE=$(date '+%d-%m-%Y')
+        ARCHIVE_FILE="Q4_archive_${DATE}.txt"
+
+        # Add your name and surname
+        echo "Nom et prénom : Hay Baptiste" > $ARCHIVE_FILE
+        echo "" >> $ARCHIVE_FILE
+
+        # Add the content of Q4.java
+        echo "Contenu du fichier Q4.java :" >> $ARCHIVE_FILE
+        cat Q4.java >> $ARCHIVE_FILE
+
+        # Commit and push the archive file
+        git config user.name "Biyiv"
+        git config user.email "baptiste.hay@hotmail.fr"
+        git add $ARCHIVE_FILE
+        git commit -m "Create ${ARCHIVE_FILE} with Q4.java content"
+        git push
