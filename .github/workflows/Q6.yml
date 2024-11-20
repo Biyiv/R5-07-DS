@@ -32,32 +32,30 @@ jobs:
         echo "Taille de Q6.java :" >> $ARCHIVE_FILE
         wc Q6.java >> $ARCHIVE_FILE
 
-        # Save the name of the archive file for later use
-        echo $ARCHIVE_FILE > Q6_archive_${DATE}.txt
-
         # Commit and push the archive file
         git config user.name "Biyiv"
         git config user.email "baptiste.hay@hotmail.fr"
-        git add $ARCHIVE_FILE Q6_archive_${DATE}.txt
+        git add $ARCHIVE_FILE
         git commit -m "Create ${ARCHIVE_FILE} with Q6.java content and metadata"
         git push
 
     - name: Generate Q6_différences.txt
       run: |
-        # Load the name of the last archive file
-        LAST_ARCHIVE=$(cat Q6_archive_${DATE}.txt)
+        # Get the current archive file name
+        DATE=$(date '+%d-%m-%Y-%H%M%S')
+        CURRENT_ARCHIVE="Q6_archive_${DATE}.txt"
 
         # Find the previous archive file (excluding the current one)
-        PREVIOUS_ARCHIVE=$(ls -1 Q6_archive_*.txt | grep -v $LAST_ARCHIVE | sort -r | head -n 1)
+        PREVIOUS_ARCHIVE=$(ls -1 Q6_archive_*.txt | grep -v $CURRENT_ARCHIVE | sort -r | head -n 1)
 
         # If there's a previous archive, calculate differences
         if [ -n "$PREVIOUS_ARCHIVE" ]; then
-          diff $PREVIOUS_ARCHIVE $LAST_ARCHIVE > Q6_différences.txt || true
+          diff $PREVIOUS_ARCHIVE $CURRENT_ARCHIVE > Q6_différences.txt || true
         else
           echo "Pas de fichier précédent trouvé pour comparaison." > Q6_différences.txt
         fi
 
         # Commit and push the differences file
         git add Q6_différences.txt
-        git commit -m "Create Q6_différences.txt comparing $LAST_ARCHIVE and $PREVIOUS_ARCHIVE"
+        git commit -m "Create Q6_différences.txt comparing $CURRENT_ARCHIVE and $PREVIOUS_ARCHIVE"
         git push
